@@ -20,4 +20,18 @@ describe('debounce', () => {
     vi.advanceTimersByTime(1);
     expect(spy).toHaveBeenCalledTimes(1);
   });
+
+  test('restarts the timer on each call', () => {
+    const spy = vi.fn();
+    const debounced = debounce(spy, 300);
+
+    debounced('a');
+    vi.advanceTimersByTime(200);
+    expect(spy).not.toHaveBeenCalled();
+    debounced('b');
+    vi.advanceTimersByTime(200);
+    expect(spy).not.toHaveBeenCalled();
+    vi.advanceTimersByTime(100);
+    expect(spy).toHaveBeenCalledTimes(1);
+  });
 });
