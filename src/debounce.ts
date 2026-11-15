@@ -4,8 +4,8 @@ export function debounce(
 ): (...args: unknown[]) => void {
   let timerId: ReturnType<typeof setTimeout> | undefined;
 
-  return () => {
+  return (...args: unknown[]) => {
     clearTimeout(timerId);
-    timerId = setTimeout(() => fn(), delay);
+    timerId = setTimeout(() => fn(...args), delay);
   };
 }
