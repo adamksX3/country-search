@@ -21,7 +21,7 @@ function fakeServer(delays: Record<string, number>) {
           resolve(new Response(JSON.stringify([rawCountry(query)])));
         }, delays[query]);
 
-        init.signal.addEventListener('about', () => {
+        init.signal.addEventListener('abort', () => {
           clearTimeout(timer);
           reject(new DOMException('Aborted', 'AbortError'));
         });
