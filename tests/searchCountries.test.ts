@@ -48,4 +48,13 @@ describe('searchCountries', () => {
       HttpError,
     );
   });
+
+  test('requests the countries.dev API with the query', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(new Response('[]', { status: 200 }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    await searchCountries('russia', new AbortController().signal);
+
+    expect(fetchMock).toHaveBeenCalledWith('https://countries.dev/name/russia', expect.anything());
+  });
 });
