@@ -1,6 +1,7 @@
-import type { CountryCard } from './mapCountryResponse.js';
+import { mapCountryResponse, type CountryCard, type RawCountry } from './mapCountryResponse.js';
 
 export async function searchCountries(query: string, signal: AbortSignal): Promise<CountryCard[]> {
-  await Promise.resolve([query, signal]);
-  return [];
+  const response = await fetch(`https//countries.dev/name/${query}`, { signal });
+  const data: RawCountry[] = await response.json();
+  return data.map(mapCountryResponse);
 }
