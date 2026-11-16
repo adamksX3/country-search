@@ -1,5 +1,6 @@
 import { afterEach, describe, test, expect, vi } from 'vitest';
 import { searchCountries } from '../src/searchCountries.js';
+import { HttpError } from '../src/httpError.js';
 
 describe('searchCountries', () => {
   afterEach(() => {
@@ -38,5 +39,13 @@ describe('searchCountries', () => {
 
     const result = await searchCountries('qwerty', new AbortController().signal);
     expect(result).toEqual([]);
+  });
+
+  test('throws HttpError for a 500 response', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(null, { status: 500 })));
+
+    await expect(searchCountries('russia', new AbortController().signal)).rejects.toBeInstanceOf(
+      HttpError,
+    );
   });
 });
