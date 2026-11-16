@@ -1,5 +1,6 @@
 import { debounce } from './debounce.js';
 import { createLatestSearch } from './latestSearch.js';
+import type { CountryCard } from './mapCountryResponse.js';
 
 const search = createLatestSearch();
 
@@ -15,6 +16,21 @@ retry.hidden = true;
 const list = document.createElement('ul');
 
 document.body.append(input, status, retry, list);
+
+function createCardElement(card: CountryCard): HTMLLIElement {
+  const li = document.createElement('li');
+
+  const flag = document.createElement('img');
+  flag.src = card.flag;
+  flag.alt = `Флаг: ${card.name}`;
+  flag.width = 32;
+
+  const name = document.createElement('strong');
+  name.textContent = card.name;
+
+  li.append(flag, ' ', name);
+  return li;
+}
 
 async function runSearch(): Promise<void> {
   const query = input.value.trim();
@@ -33,11 +49,7 @@ async function runSearch(): Promise<void> {
 
     status.textContent = cards.length === 0 ? 'Ничего не найдено' : '';
 
-    const items = cards.map((card) => {
-      const li = document.createElement('li');
-      li.textContent = card.name;
-      return li;
-    });
+    const items = cards.map(createCardElement);
     list.replaceChildren(...items);
   } catch (error) {
     if (error instanceof Error && error.name === 'AbortError') {
