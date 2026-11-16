@@ -15,7 +15,27 @@ retry.hidden = true;
 
 const list = document.createElement('ul');
 
-document.body.append(input, status, retry, list);
+const details = document.createElement('section');
+
+document.body.append(input, status, retry, list, details);
+
+function showDetails(card: CountryCard): void {
+  const title = document.createElement('h2');
+  title.textContent = card.name;
+
+  const flag = document.createElement('img');
+  flag.src = card.flag;
+  flag.alt = `Флаг: ${card.name}`;
+  flag.width = 120;
+
+  const info = document.createElement('p');
+  info.textContent =
+    `Столица: ${card.capital || '—'}. Регион: ${card.region}. ` +
+    `Население: ${card.population.toLocaleString('ru-RU')}. ` +
+    `Языки: ${card.languages.join(', ')}.`;
+
+  details.replaceChildren(title, flag, info);
+}
 
 function createCardElement(card: CountryCard): HTMLLIElement {
   const li = document.createElement('li');
@@ -29,6 +49,10 @@ function createCardElement(card: CountryCard): HTMLLIElement {
   name.textContent = card.name;
 
   li.append(flag, ' ', name);
+  li.addEventListener('click', () => {
+    showDetails(card);
+  });
+  li.style.cursor = 'pointer';
   return li;
 }
 
@@ -39,6 +63,7 @@ async function runSearch(): Promise<void> {
     status.textContent = '';
     retry.hidden = true;
     list.replaceChildren();
+    details.replaceChildren();
     return;
   }
 
