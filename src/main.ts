@@ -22,16 +22,28 @@ input.addEventListener(
       return;
     }
 
-    status.textContent = 'Загрузка…';
-    const cards = await search(query);
+    try {
+      status.textContent = 'Загрузка…';
+      const cards = await search(query);
 
-    status.textContent = cards.length === 0 ? 'Ничего не найдено' : '';
+      status.textContent = cards.length === 0 ? 'Ничего не найдено' : '';
 
-    const items = cards.map((card) => {
-      const li = document.createElement('li');
-      li.textContent = card.name;
-      return li;
-    });
-    list.replaceChildren(...items);
+      const items = cards.map((card) => {
+        const li = document.createElement('li');
+        li.textContent = card.name;
+        return li;
+      });
+      list.replaceChildren(...items);
+    } catch (error) {
+      if (error instanceof Error && error.name === 'AbortError') {
+        return;
+      }
+      if (error instanceof Error && error.name === 'TimeoutError') {
+        status.textContent = 'Сервер не отвечает';
+        return;
+      }
+      list.replaceChildren();
+      status.textContent = 'Ошибка. Попробуйте ещё раз';
+    }
   }, 300),
 );
