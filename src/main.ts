@@ -5,6 +5,8 @@ const search = createLatestSearch();
 const input = document.createElement('input');
 input.placeholder = 'England';
 document.body.append(input);
+const list = document.createElement('ul');
+document.body.append(list);
 input.addEventListener(
   'input',
   debounce(async () => {
@@ -13,6 +15,12 @@ input.addEventListener(
       return;
     }
     const cards = await search(query);
-    console.log(cards);
+
+    const items = cards.map((card) => {
+      const li = document.createElement('li');
+      li.textContent = card.name;
+      return li;
+    });
+    list.replaceChildren(...items);
   }, 300),
 );
