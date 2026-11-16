@@ -19,6 +19,7 @@ document.body.append(input, status, retry, list);
 async function runSearch(): Promise<void> {
   const query = input.value.trim();
   if (query === '') {
+    search.cancel();
     status.textContent = '';
     retry.hidden = true;
     list.replaceChildren();
