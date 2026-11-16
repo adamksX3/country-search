@@ -20,13 +20,13 @@ describe('mapCountryResponse', () => {
       callingCodes: ['1'],
       topLevelDomain: ['.us'],
       borders: ['CAN', 'MEX'],
-      flag: 'https://countries.dev/flags/us.svg',
+      flags: { png: 'https://flagcdn.com/w320/us.png', svg: 'https://flagcdn.com/us.svg' },
     };
 
     expect(mapCountryResponse(raw)).toEqual({
       name: 'United States of America',
       capital: 'Washington, D.C.',
-      flag: 'https://countries.dev/flags/us.svg',
+      flag: 'https://flagcdn.com/us.svg',
       languages: ['English', 'Spanish'],
       region: 'Americas',
       population: 329484123,
