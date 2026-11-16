@@ -51,4 +51,14 @@ describe('createLatestSearch', () => {
 
     await expect(first).rejects.toHaveProperty('name', 'TimeoutError');
   });
+
+  test('cancels the pending request when the search is cleared', async () => {
+    vi.stubGlobal('fetch', fakeServer({ ru: 50 }));
+    const search = createLatestSearch();
+
+    const first = search('ru');
+    search.cancel();
+
+    await expect(first).rejects.toHaveProperty('name', 'AbortError');
+  });
 });
