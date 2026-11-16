@@ -23,7 +23,7 @@ function fakeServer(delays: Record<string, number>) {
 
         init.signal.addEventListener('abort', () => {
           clearTimeout(timer);
-          reject(new DOMException('Aborted', 'AbortError'));
+          reject(init.signal.reason);
         });
       }),
   );
@@ -42,5 +42,13 @@ describe('createLatestSearch', () => {
 
     await expect(first).rejects.toHaveProperty('name', 'AbortError');
     await expect(second).resolves.toHaveLength(1);
+  });
+
+  test('rejects with TimeoutError when the server is too slow', async () => {
+    vi.stubGlobal('fetch', fakeServer({ ru: 200 }));
+    const search = createLatestSearch(20);
+    const first = search('ru');
+
+    await expect(first).rejects.toHaveProperty('name', 'TimeoutError');
   });
 });
