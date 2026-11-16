@@ -35,9 +35,10 @@ describe('debounce', () => {
     expect(spy).toHaveBeenCalledTimes(1);
   });
 
-  test('passses arguments to fn', () => {
+  test('passes arguments to fn', () => {
     const spy = vi.fn();
     const debounced = debounce(spy, 300);
+
     debounced('russia');
     vi.advanceTimersByTime(300);
     expect(spy).toHaveBeenCalledWith('russia');
