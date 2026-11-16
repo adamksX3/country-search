@@ -32,4 +32,11 @@ describe('searchCountries', () => {
       },
     ]);
   });
+
+  test('returns an empty list for a 404 response', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(null, { status: 404 })));
+
+    const result = await searchCountries('qwerty', new AbortController().signal);
+    expect(result).toEqual([]);
+  });
 });
