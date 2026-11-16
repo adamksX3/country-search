@@ -4,7 +4,7 @@ export function mapCountryResponse(raw: RawCountry): CountryCard {
     capital: raw.capital,
     region: raw.region,
     population: raw.population,
-    flag: raw.flag,
+    flag: raw.flags.svg,
     languages: raw.languages.map((language) => language.name),
   };
 }
@@ -14,7 +14,7 @@ export type RawCountry = {
   capital: string;
   region: string;
   population: number;
-  flag: string;
+  flags: { svg: string };
   languages: { name: string }[];
 };
 
