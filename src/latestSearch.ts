@@ -1,7 +1,7 @@
 import { searchCountries } from './searchCountries.js';
 import type { CountryCard } from './mapCountryResponse.js';
 
-export function createLatestSearch() {
+export function createLatestSearch(timeoutMs = 10000) {
   let controller: AbortController | undefined;
 
   return (query: string): Promise<CountryCard[]> => {
@@ -9,6 +9,7 @@ export function createLatestSearch() {
       controller.abort();
     }
     controller = new AbortController();
-    return searchCountries(query, controller.signal);
+    const signal = AbortSignal.any([controller.signal, AbortSignal.timeout(timeoutMs)]);
+    return searchCountries(query, signal);
   };
 }
